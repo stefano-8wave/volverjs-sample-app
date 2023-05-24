@@ -6,15 +6,24 @@
         characterId: number
     }>()
 
-    const { repository: locationsRepository } =
-        useRepositoryHttp<Location>('api/location/:id')
+    const location: Ref<Location | undefined> = ref()
+    const hasError = ref(false)
 
-    const { responsePromise } = locationsRepository.read({
-        id: props.characterId,
-    })
-    const { data, ok, abortReason } = await responsePromise
+    watch(
+        () => props.characterId,
+        async (newValue) => {
+            const { repository: locationsRepository } =
+                useRepositoryHttp<Location>('api/location/:id')
 
-    const location = computed(() => data?.[0])
+            const { responsePromise } = locationsRepository.read({
+                id: newValue,
+            })
+            const { data, ok } = await responsePromise
+            location.value = data?.[0]
+            hasError.value = !ok
+        },
+        { immediate: true },
+    )
 </script>
 
 <template>
@@ -22,6 +31,6 @@
         <h3>Location: {{ location?.name }}</h3>
         <h4>Dimension: {{ location?.dimension }}</h4>
         <h4>Type: {{ location?.type }}</h4>
-        <h2 v-if="!ok">An error occurred for: {{ abortReason }}</h2>
+        <h2 v-if="hasError">An error occurred</h2>
     </div>
 </template>

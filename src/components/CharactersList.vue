@@ -28,7 +28,6 @@
 </script>
 
 <template>
-    <VvProgress v-if="isLoading && !data?.length" label="loading" />
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-md mt-lg">
         <CharacterItem
             v-for="character in data"
@@ -47,13 +46,8 @@
         transition="fade-block"
         size="standard"
         default="Default slot content">
-        <Suspense>
-            <LocationComponent
-                v-if="currentCharacter"
-                :character-id="currentCharacter.id" />
-            <template #fallback>
-                <div>Loading...</div>
-            </template>
-        </Suspense>
+        <LocationComponent
+            v-if="currentCharacter"
+            :character-id="currentCharacter.id" />
     </VvDialog>
 </template>
