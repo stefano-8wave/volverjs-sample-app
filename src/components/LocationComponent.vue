@@ -3,7 +3,7 @@
     import { Location } from '~/models/Location'
 
     const props = defineProps<{
-        characterId: number
+        locationUrl: string
     }>()
 
     const location: Ref<Location | undefined> = ref()
@@ -13,10 +13,10 @@
         useRepositoryHttp<Location>('api/location/:id')
 
     watch(
-        () => props.characterId,
+        () => props.locationUrl,
         async (newValue) => {
             const { responsePromise } = locationsRepository.read({
-                id: newValue,
+                id: newValue.split('/').slice(-1)[0],
             })
             const { data, ok } = await responsePromise
             location.value = data?.[0]
