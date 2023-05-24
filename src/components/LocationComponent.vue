@@ -9,12 +9,12 @@
     const location: Ref<Location | undefined> = ref()
     const hasError = ref(false)
 
+    const { repository: locationsRepository } =
+        useRepositoryHttp<Location>('api/location/:id')
+
     watch(
         () => props.characterId,
         async (newValue) => {
-            const { repository: locationsRepository } =
-                useRepositoryHttp<Location>('api/location/:id')
-
             const { responsePromise } = locationsRepository.read({
                 id: newValue,
             })
