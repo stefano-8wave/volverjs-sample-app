@@ -1,13 +1,18 @@
-import { useRepositoryHttp } from '@volverjs/data/vue'
+import { RepositoryHttp } from '@volverjs/data/repository-http'
 import { defineStoreRepository } from '@volverjs/query-vue'
 import { Character } from '~/models/Character'
 import { Response } from '~/models/Response'
+import { httpClient } from '~/common/HttpClient'
 
-export const useCharactersStore = () => {
-    const { repository: charactersRepository } = useRepositoryHttp<
-        Character,
-        Response<Character>
-    >('api/character', { responseAdapter: (response) => response.results })
+const charactersRepository = new RepositoryHttp<Character, Response<Character>>(
+    httpClient,
+    'api/character',
+    {
+        responseAdapter: (response: Response<Character>) => response.results,
+    },
+)
 
-    return defineStoreRepository(charactersRepository, 'characters')()
-}
+export const useCharactersStore = defineStoreRepository(
+    charactersRepository,
+    'characters',
+)

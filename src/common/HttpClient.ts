@@ -1,5 +1,5 @@
 import { createHttpClient } from '@volverjs/data/vue'
 
-export const httpClientPlugin = createHttpClient({
+export const httpClient = createHttpClient({
     prefixUrl: 'https://rickandmortyapi.com',
 })
